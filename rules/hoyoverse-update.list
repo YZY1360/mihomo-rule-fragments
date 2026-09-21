@@ -6,15 +6,6 @@
 #   要连国内 CDN，必须让这些域名走国内 DNS（阿里 DoH / 腾讯 DoH）解析，
 #   并放进 fake-ip-filter，避免 fake-ip 让远端节点解析。
 #
-# 实测落地（2026-09-21，用户 LAN 内解析，本机 DNS / 阿里 223.5.5.5 / 腾讯 119.29.29.29 结果一致，
-# 带用户 ECS 结果也相同）：
-#   autopatchos.starrails.com          -> 116.207.139.120 / 119.96.6.119  国内（电信/网宿调度）
-#   autopatchhk.yuanshen.com           -> 43.175.115.x（腾讯云海外）/ 23.2.13.x（Akamai）
-#   autopatchos.zenlesszonezero.com    -> 13.249.74.x（CloudFront）
-#   autopatchos/glb.honkaiimpact3.com  -> 95.101.171.x（Akamai）
-#   国服对照：autopatchcn.bhsr.com -> 111.174.4.x（火山引擎）、autopatchcn.yuanshen.com ->
-#   119.96.5.x（网宿）、autopatchcn.juequling.com -> 58.49.156.x（网宿）、autopatchcn.bh3.com -> 119.96.89.x（腾讯云）
-#
 # 注意：本规则必须排在 hoyoverse-intl.list 及其它规则之前。
 
 # 崩坏：星穹铁道（国际服）
