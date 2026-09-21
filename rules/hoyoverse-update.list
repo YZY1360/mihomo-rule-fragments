@@ -8,18 +8,17 @@
 #
 # 注意：本规则必须排在 hoyoverse-intl.list 及其它规则之前。
 
-# 崩坏：星穹铁道（国际服）
+# 崩坏：星穹铁道（国际服）—— 实测有国内 CDN 调度，直连成立
 +.autopatchos.starrails.com
 
+# 以下三个国际服补丁域实测解析到海外 CDN，直连拿不到国内 CDN，先注释掉。
 # 原神（国际服）
-+.autopatchhk.yuanshen.com
-
+#+.autopatchhk.yuanshen.com
 # 绝区零（国际服）
-+.autopatchos.zenlesszonezero.com
-
+#+.autopatchos.zenlesszonezero.com
 # 崩坏3（国际服，按账号区服取用）
-+.autopatchglb.honkaiimpact3.com
-+.autopatchos.honkaiimpact3.com
-+.autopatchjp.honkaiimpact3.com
-+.autopatchkr.honkaiimpact3.com
-+.autopatchasia.honkaiimpact3.com
+#+.autopatchglb.honkaiimpact3.com
+#+.autopatchos.honkaiimpact3.com
+#+.autopatchjp.honkaiimpact3.com
+#+.autopatchkr.honkaiimpact3.com
+#+.autopatchasia.honkaiimpact3.com
