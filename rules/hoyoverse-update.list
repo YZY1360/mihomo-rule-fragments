@@ -1,6 +1,29 @@
-# 国际服补丁/更新 CDN：国内直连
+# 国际服补丁 / 更新 / 安装包 CDN
 # behavior: domain
-# 说明：autopatchos.starrails.com 自带国内 CDN 调度，国内 DNS 通常解析到国内节点，
-#       更新下载走直连可省代理流量且一般不影响登录风控。
-# 注意：使用时本规则必须排在 hoyoverse-intl 前面。
+#
+# 各游戏国际服补丁域名实测（AliDNS 国内解析）：
+#   autopatchos.starrails.com         -> 网宿国内节点（119.96.6.x / 111.170.2.x），国内直连成立
+#   autopatchhk.yuanshen.com          -> CloudFront（海外）
+#   autopatchos.zenlesszonezero.com   -> CloudFront / Akamai（海外）
+#   autopatch*.honkaiimpact3.com      -> Akamai / whecloud（海外）
+# 国服补丁域名不在这里（实测均为国内 CDN）：autopatchcn.bhsr.com（火山引擎）、
+# autopatchcn.yuanshen.com（网宿）、autopatchcn.juequling.com（网宿）、autopatchcn.bh3.com（腾讯云）。
+# 上面三个海外 CDN 的域名是否直连按自家线路决定；直连不理想就把对应行挪到 hoyoverse-intl.list 走固定节点。
+#
+# 注意：本规则必须排在 hoyoverse-intl.list 及其它规则之前。
+
+# 崩坏：星穹铁道（国际服）
 +.autopatchos.starrails.com
+
+# 原神（国际服）
++.autopatchhk.yuanshen.com
+
+# 绝区零（国际服）
++.autopatchos.zenlesszonezero.com
+
+# 崩坏3（国际服，按账号区服取用）
++.autopatchglb.honkaiimpact3.com
++.autopatchos.honkaiimpact3.com
++.autopatchjp.honkaiimpact3.com
++.autopatchkr.honkaiimpact3.com
++.autopatchasia.honkaiimpact3.com

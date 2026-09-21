@@ -1,14 +1,22 @@
-# HoYoverse / 米哈游国际服游戏与相关服务
+# HoYoverse / 米哈游 国际服：登录、SDK、商店、官网、社区、启动器
 # behavior: domain
-# 用途：登录 / SDK / 商店 / 支付 API 走固定代理节点，避免多出口 IP 触发风控
+#
+# 区服划分依据（v2fly/domain-list-community 的 data/hoyoverse 与 data/mihoyo-cn + 各游戏国际服下载域名实测）：
+#   国际服 = hoyoverse.com / hoyolab.com / genshinimpact.com / honkaiimpact3.com /
+#            honkaistarrail.com / starrails.com / zenlesszonezero.com / hoyo.link / n0vadesktop.com
+#   国服   = mihoyo.com / yuanshen.com / juequling.com / bhsr.com / bh3.com / themisweeps.com ...
+#
+# 国服域名不放进本文件（放进来只会把国服流量绕到海外）：
+#   yuanshen.com   仅承载国服原神（autopatchcn.yuanshen.com，实测国内 CDN）
+#   juequling.com  仅承载国服绝区零（autopatchcn.juequling.com，实测国内 CDN）
+#   themisweeps.com 是国服《未定事件簿》
+# 国际服原神/绝区零用的是 genshinimpact.com / zenlesszonezero.com。
 +.hoyoverse.com
 +.hoyolab.com
 +.hoyo.link
 +.honkaistarrail.com
 +.starrails.com
-+.yuanshen.com
 +.genshinimpact.com
 +.honkaiimpact3.com
-+.juequling.com
-+.themisweeps.com
++.zenlesszonezero.com
 +.n0vadesktop.com
