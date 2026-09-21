@@ -1,0 +1,14 @@
+# HoYoverse / 米哈游国际服游戏与相关服务
+# behavior: domain
+# 用途：登录 / SDK / 商店 / 支付 API 走固定代理节点，避免多出口 IP 触发风控
++.hoyoverse.com
++.hoyolab.com
++.hoyo.link
++.honkaistarrail.com
++.starrails.com
++.yuanshen.com
++.genshinimpact.com
++.honkaiimpact3.com
++.juequling.com
++.themisweeps.com
++.n0vadesktop.com

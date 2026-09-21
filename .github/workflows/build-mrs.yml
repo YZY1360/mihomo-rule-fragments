@@ -1,0 +1,66 @@
+name: build-mrs
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每天 UTC 18:00（CST 02:00）定时重建
+    - cron: '0 18 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'rules/**'
+      - '.github/workflows/build-mrs.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download mihomo
+        run: |
+          set -euo pipefail
+          API=https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
+          TAG=$(curl -fsSL "$API" | jq -r '.tag_name')
+          ASSET=$(curl -fsSL "$API" | jq -r '.assets[].name' \
+            | grep -E '^mihomo-linux-amd64-compatible-.*\.gz$' | head -n1)
+          echo "mihomo ${TAG} / ${ASSET}"
+          curl -fsSL "https://github.com/MetaCubeX/mihomo/releases/download/${TAG}/${ASSET}" -o mihomo.gz
+          gunzip -f mihomo.gz
+          chmod +x mihomo
+          ./mihomo -v
+
+      - name: Convert rules to MRS
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+
+          ./mihomo convert-ruleset domain text rules/hoyoverse-intl.list   dist/hoyoverse-intl.mrs
+          ./mihomo convert-ruleset domain text rules/hoyoverse-update.list dist/hoyoverse-update.mrs
+
+          # 如果 hoyoverse-ip.list 里有有效 CIDR
+          if grep -qE '^[[:space:]]*[0-9a-fA-F]' rules/hoyoverse-ip.list; then
+            ./mihomo convert-ruleset ipcidr text rules/hoyoverse-ip.list dist/hoyoverse-ip.mrs
+          else
+            echo "hoyoverse-ip.list 无有效 CIDR，跳过"
+            rm -f dist/hoyoverse-ip.mrs
+          fi
+
+          ls -l dist
+
+      - name: Commit dist
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist
+          if git diff --cached --quiet; then
+            echo "dist/ 无变化"
+            exit 0
+          fi
+          git commit -m "chore: rebuild MRS [skip ci]"
+          git push

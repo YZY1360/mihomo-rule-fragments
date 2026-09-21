@@ -1,0 +1,6 @@
+# 国际服补丁/更新 CDN：国内直连
+# behavior: domain
+# 说明：autopatchos.starrails.com 自带国内 CDN 调度，国内 DNS 通常解析到国内节点，
+#       更新下载走直连可省代理流量且一般不影响登录风控。
+# 注意：使用时本规则必须排在 hoyoverse-intl 前面。
++.autopatchos.starrails.com

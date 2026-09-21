@@ -1,0 +1,11 @@
+# 可选的 IP CIDR 补充列表
+# behavior: ipcidr
+#
+# 目前建议留空，原因：
+#   - HoYoverse 登录 / 商店 / 下载大量使用 CloudFront、Akamai、阿里云等动态 IP，变化频繁
+#   - 硬编码 CIDR 容易过期，误伤面大
+#   - 游戏 UDP 优先用 PROCESS-NAME,StarRail.exe 规则兜底
+#
+# 如果确实需要，每行写一个 CIDR（支持 IPv4 / IPv6）：
+# 1.2.3.0/24
+# 2001:db8::/32
