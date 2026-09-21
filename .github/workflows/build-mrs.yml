@@ -1,15 +1,8 @@
 name: build-mrs
 
 on:
+  # 只在需要时手动触发（Actions 页面 Run workflow，或 gh workflow run build-mrs）
   workflow_dispatch:
-  schedule:
-    # 每天 UTC 18:00（CST 02:00）定时重建
-    - cron: '0 18 * * *'
-  push:
-    branches: [main]
-    paths:
-      - 'rules/**'
-      - '.github/workflows/build-mrs.yml'
 
 permissions:
   contents: write
