@@ -3,14 +3,19 @@
 #
 # 区服划分依据（v2fly/domain-list-community 的 data/hoyoverse 与 data/mihoyo-cn + 各游戏国际服下载域名实测）：
 #   国际服 = hoyoverse.com / hoyolab.com / genshinimpact.com / honkaiimpact3.com /
-#            honkaistarrail.com / starrails.com / zenlesszonezero.com / hoyo.link / n0vadesktop.com
-#   国服   = mihoyo.com / yuanshen.com / juequling.com / bhsr.com / bh3.com / themisweeps.com ...
+#            honkaistarrail.com / starrails.com / zenlesszonezero.com / hoyo.link
+#   国服   = mihoyo.com / yuanshen.com / juequling.com / bhsr.com / bh3.com /
+#            themisweeps.com / n0vadesktop.com ...
 #
 # 国服域名不放进本文件（放进来只会把国服流量绕到海外）：
-#   yuanshen.com   仅承载国服原神（autopatchcn.yuanshen.com，实测国内 CDN）
-#   juequling.com  仅承载国服绝区零（autopatchcn.juequling.com，实测国内 CDN）
+#   yuanshen.com    仅承载国服原神（autopatchcn.yuanshen.com，实测国内 CDN）
+#   juequling.com   仅承载国服绝区零（autopatchcn.juequling.com，实测国内 CDN）
 #   themisweeps.com 是国服《未定事件簿》
-# 国际服原神/绝区零用的是 genshinimpact.com / zenlesszonezero.com。
+#   n0vadesktop.com 是人工桌面（yoyo鹿鸣）官网：实测走阿里云国内 CDN，页面资源在
+#                   webstatic.mihoyo.com，接口在 api-takumi.mihoyo.com，同一站点按
+#                   hostname 在 mihoyo.com / hoyoverse.com 之间切换，故归国服。
+# 国际服原神/绝区零用的是 genshinimpact.com / zenlesszonezero.com；
+# 人工桌面的国际版入口 n0vadp.hoyoverse.com 由 +.hoyoverse.com 覆盖。
 +.hoyoverse.com
 +.hoyolab.com
 +.hoyo.link
@@ -19,4 +24,3 @@
 +.genshinimpact.com
 +.honkaiimpact3.com
 +.zenlesszonezero.com
-+.n0vadesktop.com
