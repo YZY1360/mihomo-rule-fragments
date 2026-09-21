@@ -1,14 +1,19 @@
-# 国际服补丁 / 更新 / 安装包 CDN
+# 国际服补丁 / 更新 / 安装包 CDN —— 走直连
 # behavior: domain
 #
-# 各游戏国际服补丁域名实测（AliDNS 国内解析）：
-#   autopatchos.starrails.com         -> 网宿国内节点（119.96.6.x / 111.170.2.x），国内直连成立
-#   autopatchhk.yuanshen.com          -> CloudFront（海外）
-#   autopatchos.zenlesszonezero.com   -> CloudFront / Akamai（海外）
-#   autopatch*.honkaiimpact3.com      -> Akamai / whecloud（海外）
-# 国服补丁域名不在这里（实测均为国内 CDN）：autopatchcn.bhsr.com（火山引擎）、
-# autopatchcn.yuanshen.com（网宿）、autopatchcn.juequling.com（网宿）、autopatchcn.bh3.com（腾讯云）。
-# 上面三个海外 CDN 的域名是否直连按自家线路决定；直连不理想就把对应行挪到 hoyoverse-intl.list 走固定节点。
+# 这些补丁域不做 302 跳转（实测：请求直接由源域返回文件），
+# 所以「连到哪家 CDN」完全由 DNS 解析结果决定：
+#   要连国内 CDN，必须让这些域名走国内 DNS（阿里 DoH / 腾讯 DoH）解析，
+#   并放进 fake-ip-filter，避免 fake-ip 让远端节点解析。
+#
+# 实测落地（2026-09-21，用户 LAN 内解析，本机 DNS / 阿里 223.5.5.5 / 腾讯 119.29.29.29 结果一致，
+# 带用户 ECS 结果也相同）：
+#   autopatchos.starrails.com          -> 116.207.139.120 / 119.96.6.119  国内（电信/网宿调度）
+#   autopatchhk.yuanshen.com           -> 43.175.115.x（腾讯云海外）/ 23.2.13.x（Akamai）
+#   autopatchos.zenlesszonezero.com    -> 13.249.74.x（CloudFront）
+#   autopatchos/glb.honkaiimpact3.com  -> 95.101.171.x（Akamai）
+#   国服对照：autopatchcn.bhsr.com -> 111.174.4.x（火山引擎）、autopatchcn.yuanshen.com ->
+#   119.96.5.x（网宿）、autopatchcn.juequling.com -> 58.49.156.x（网宿）、autopatchcn.bh3.com -> 119.96.89.x（腾讯云）
 #
 # 注意：本规则必须排在 hoyoverse-intl.list 及其它规则之前。
 
