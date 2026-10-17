@@ -45,6 +45,23 @@ jobs:
 
           ls -l dist
 
+      # ACL4SSR 上游只给 Clash/Providers/**/*.yaml 与 Clash/Ruleset/*.list 出了 mrs
+      # （Clash/mrs/，每天 UTC 00:00 自动转）。顶层 Clash/*.list 里的纯 IP 集没有 mrs，
+      # 这里自己转一份发布，规则来源仍然是 ACL4SSR 自身，不引入第三方规则源。
+      - name: Convert ACL4SSR ip lists without upstream mrs
+        run: |
+          set -euo pipefail
+          mkdir -p dist .tmp/acl4ssr
+          A4S=https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash
+          for f in ChinaIp ChinaCompanyIp; do
+            curl -fsSL "$A4S/$f.list" -o ".tmp/acl4ssr/$f.list"
+            grep -qE '^[[:space:]]*IP-CIDR' ".tmp/acl4ssr/$f.list"
+            ./mihomo convert-ruleset ipcidr text ".tmp/acl4ssr/$f.list" "dist/$f.mrs"
+            echo "$f: 源 $(grep -cE '^[[:space:]]*IP-CIDR' .tmp/acl4ssr/$f.list) 条 -> $(stat -c %s "dist/$f.mrs") bytes"
+          done
+          rm -rf .tmp
+          ls -l dist
+
       - name: Commit dist
         run: |
           set -euo pipefail
