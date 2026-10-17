@@ -45,27 +45,14 @@ jobs:
 
           ls -l dist
 
-      # ACL4SSR 上游只给 Clash/Providers/**/*.yaml 与 Clash/Ruleset/*.list 出了 mrs
-      # （Clash/mrs/，每天 UTC 00:00 自动转）。顶层 Clash/*.list 里的纯 IP 集没有 mrs，
-      # 这里自己转一份发布，规则来源仍然是 ACL4SSR 自身，不引入第三方规则源。
-      - name: Convert ACL4SSR ip lists without upstream mrs
+      # ACL4SSR 上游自带的 Clash/mrs/*_domain.mrs 实测能加载但匹配不到任何域名
+      # （ruleCount 对得上、域名命中为 0），所以这里从 ACL4SSR 的 .list 源自己转。
+      # 规则来源仍然只有 ACL4SSR 自身；DOMAIN-KEYWORD 无法用 domain mrs 表达，
+      # 由脚本输出 dist/a4s/keywords.tsv，mihomo 侧需写成显式 DOMAIN-KEYWORD 规则。
+      - name: Convert ACL4SSR lists to mrs
         run: |
           set -euo pipefail
-          mkdir -p dist .tmp/acl4ssr
-          A4S=https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash
-          # 注意：ACL4SSR 的 .list 是 clash ruleset 语法（IP-CIDR,x/y,no-resolve），
-          # convert-ruleset ipcidr text 只吃裸 CIDR，必须先剥前缀/后缀，否则整行报 invalid Ipcidr。
-          for f in ChinaIp ChinaCompanyIp; do
-            curl -fsSL "$A4S/$f.list" -o ".tmp/acl4ssr/$f.list"
-            grep -E '^IP-CIDR6?,' ".tmp/acl4ssr/$f.list" \
-              | sed -E 's/^IP-CIDR6?,//; s/,no-resolve$//; s/[[:space:]]//g' \
-              > ".tmp/acl4ssr/$f.txt"
-            test -s ".tmp/acl4ssr/$f.txt"
-            ./mihomo convert-ruleset ipcidr text ".tmp/acl4ssr/$f.txt" "dist/$f.mrs"
-            echo "$f: $(wc -l < .tmp/acl4ssr/$f.txt) 条 CIDR -> $(stat -c %s "dist/$f.mrs") bytes"
-          done
-          rm -rf .tmp
-          ls -l dist
+          bash scripts/build-a4s.sh ./mihomo
 
       - name: Commit dist
         run: |
