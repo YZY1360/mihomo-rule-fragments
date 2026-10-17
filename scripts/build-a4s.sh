@@ -44,6 +44,7 @@ NaSDDNS:Ruleset/NaSDDNS.list
 # name:相对路径   （ip 集：取 IP-CIDR / IP-CIDR6）
 IP_SETS="
 ChinaIp:ChinaIp.list
+ChinaIpV6:ChinaIpV6.list
 ChinaCompanyIp:ChinaCompanyIp.list
 LocalAreaNetwork:LocalAreaNetwork.list
 Apple:Ruleset/Apple.list
@@ -52,6 +53,9 @@ Telegram:Ruleset/Telegram.list
 NetflixIP:Ruleset/NetflixIP.list
 NaSDDNS:Ruleset/NaSDDNS.list
 "
+
+# 额外输出纯 CIDR 文本（一行一个），给 OpenClash 的 chnr_custom_url / chnr6_custom_url 用
+TXT_SETS="ChinaIp ChinaIpV6"
 
 fetch() { curl -fsSL "$BASE/$1" -o "$2"; }
 
@@ -91,6 +95,12 @@ for item in $IP_SETS; do
   else
     echo "$name _ip: 0 条，跳过"; rm -f "$OUT/${name}_ip.mrs"
   fi
+  for t in $TXT_SETS; do
+    if [ "$t" = "$name" ] && [ "$n" -gt 0 ]; then
+      cp "$norm" "$OUT/${name}_ip.txt"
+      echo "$name _ip.txt: $n 行（给 OpenClash chnr 用）"
+    fi
+  done
 done
 
 sort -u -o "$KW" "$KW"
