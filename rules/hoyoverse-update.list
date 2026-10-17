@@ -1,26 +1,30 @@
-# 国际服补丁 / 更新 / 安装包 CDN —— 走直连
+# 国际服补丁 / 更新 / 安装包 CDN —— 不走 game 组
 # behavior: domain
 #
-# 这些补丁域不做 302 跳转（实测：请求直接由源域返回文件），
-# 所以「连到哪家 CDN」完全由 DNS 解析结果决定：
-#   要连国内 CDN，必须让这些域名走国内 DNS（阿里 DoH / 腾讯 DoH）解析，
-#   并放进 fake-ip-filter，避免 fake-ip 让远端节点解析。
+# 这些补丁域都解析到海外 CDN：
+#   绝区零 autopatchos.zenlesszonezero.com  -> Akamai 23.200.230.x
+#   原神   autopatchhk.yuanshen.com        -> CloudFront / Akamai
+#   崩坏3  autopatch*.honkaiimpact3.com    -> Akamai / whecloud
+# 若落进 hoyoverse-intl.list 的代理范围会走 game 组（日本手动），
+# 机场日本节点带宽低 → 下载又慢又烧流量，所以统一由本集合拎到「香港自动」组。
+#
+# 崩铁国际服补丁域（autopatchos.starrails.com）解析到国内电信 CDN，
+# 已移出本集合，在 mihomo 的 rules 里单独写 DOMAIN-SUFFIX,...,直连。
 #
 # 注意：本规则必须排在 hoyoverse-intl.list 及其它规则之前。
 
-# 崩坏：星穹铁道（国际服）—— 实测有国内 CDN 调度，直连成立
-+.autopatchos.starrails.com
-
-# 以下国际服补丁域解析到海外 CDN（绝区零 = Akamai/23.200.230.x），直连拿不到国内节点；
-# 但放进代理会走 game 组（日本手动），机场日本带宽很低 → 下载反而更慢、还烧流量。
-# 结论：补丁/下载类一律走 download 组（当前=直连），要换出口只改 download 组一个地方。
-# 原神（国际服）
-#+.autopatchhk.yuanshen.com
 # 绝区零（国际服）
 +.autopatchos.zenlesszonezero.com
+
+# 原神（国际服）
++.autopatchhk.yuanshen.com
+
 # 崩坏3（国际服，按账号区服取用）
-#+.autopatchglb.honkaiimpact3.com
-#+.autopatchos.honkaiimpact3.com
-#+.autopatchjp.honkaiimpact3.com
-#+.autopatchkr.honkaiimpact3.com
-#+.autopatchasia.honkaiimpact3.com
++.autopatchglb.honkaiimpact3.com
++.autopatchos.honkaiimpact3.com
++.autopatchjp.honkaiimpact3.com
++.autopatchkr.honkaiimpact3.com
++.autopatchasia.honkaiimpact3.com
+
+# 崩坏：星穹铁道（国际服）—— 国内 CDN，单独直连，不在此集合
+#+.autopatchos.starrails.com
