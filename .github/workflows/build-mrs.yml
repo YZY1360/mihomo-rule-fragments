@@ -53,11 +53,16 @@ jobs:
           set -euo pipefail
           mkdir -p dist .tmp/acl4ssr
           A4S=https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash
+          # 注意：ACL4SSR 的 .list 是 clash ruleset 语法（IP-CIDR,x/y,no-resolve），
+          # convert-ruleset ipcidr text 只吃裸 CIDR，必须先剥前缀/后缀，否则整行报 invalid Ipcidr。
           for f in ChinaIp ChinaCompanyIp; do
             curl -fsSL "$A4S/$f.list" -o ".tmp/acl4ssr/$f.list"
-            grep -qE '^[[:space:]]*IP-CIDR' ".tmp/acl4ssr/$f.list"
-            ./mihomo convert-ruleset ipcidr text ".tmp/acl4ssr/$f.list" "dist/$f.mrs"
-            echo "$f: 源 $(grep -cE '^[[:space:]]*IP-CIDR' .tmp/acl4ssr/$f.list) 条 -> $(stat -c %s "dist/$f.mrs") bytes"
+            grep -E '^IP-CIDR6?,' ".tmp/acl4ssr/$f.list" \
+              | sed -E 's/^IP-CIDR6?,//; s/,no-resolve$//; s/[[:space:]]//g' \
+              > ".tmp/acl4ssr/$f.txt"
+            test -s ".tmp/acl4ssr/$f.txt"
+            ./mihomo convert-ruleset ipcidr text ".tmp/acl4ssr/$f.txt" "dist/$f.mrs"
+            echo "$f: $(wc -l < .tmp/acl4ssr/$f.txt) 条 CIDR -> $(stat -c %s "dist/$f.mrs") bytes"
           done
           rm -rf .tmp
           ls -l dist
